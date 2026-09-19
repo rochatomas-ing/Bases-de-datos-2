@@ -1,0 +1,17 @@
+Restriccion  |   Tabla/s                 |   Atributo/s                 |   Tipo de restricción
+
+2.a          |  ARTICULO                 |  Nacionalidad                |   de atributo
+2.b          |  ARTICULO                 |Nacio..,fecha_p               |   atributo,dominio
+2.c          |  CONTIENE                 |idioma,codigo_p,id_art        |   CHECK de tabla
+2.d          | CONTIENE,ARTICULO         |nacionalidad,idioma,cod_pal   |   ASSERTION
+
+3.a          |  PROVEE                   |cod_prod,nro_prov,cod_suc     |   CHECK de tabla
+3.b          |    SUCURSAL               |   nombre,localidad           |   CHECK de tupla
+3.c          |   PRODUCTO                | presentacion,descripcion     |   CHECK de tupla
+3.d          | PROVEEDOR,PROVEE,SUCURSAL |  local(PROV),local(SUC)      |   ASSERTION
+
+4.a          |      VOLUNTARIO           |horas_aportadas(vol,coord)    |   ASSERTION o check de tabla?????????
+4.b          | VOLUNTARIO,TAREA          |min_horas,max_horas,horas_apor|   ASSERTION
+4.c          |VOLUNTARIO,INSTITUCION     |id_pais,id_tarea(vol,coord)   |   ASSERTION
+             |DIRECCION                  |                              |
+4.d          |  HISTORICO                |nro_voluntario,id_institucion |   CHECK de tabla

@@ -1,0 +1,47 @@
+Ejercicio 1_c:
+Tomando el valor de las tablas instanciadas segun el ejercicio b:
+
+i)
+MATCH SIMPLE: Se puede ya que el valor de idServ=11 apunta a un valor existente idserv de la tabla SERVICIO. En la fk
+zona,nroc al contener un nulo, indiferentemente de que el valor 'B' exista en la tabla Cliente, el match simple lo deja pasar.
+
+MATCH PARCIAL: idserv=11 matchea correctamente a un valor existente en SERVICIO. En la fk compuesta zona,nroc el match
+parcial permite que se contenga un valor nulo, pero al menos un valor debe coincidir con un valor existente en la tabla
+referenciada, y esto ocurre satisfactoriamente, se acepta el insert.
+
+MATCH FULL: idserv=11 existe en SERVICIO entonces no genera ningun problema, pero en la fk zona,nroc no cumple
+con el match full por contener un nulo. No se acepta el insert.
+
+ii)
+Fila (22,2,'Reclamo','com2_2',null,null)
+El idserv=22 matchea correctamente con un valor existente en SERVICIO, en la clave foranea zona,nroc (null,null) los 3
+tipos de matches aceptan que todos los valores de la fk sean nulos, por lo tanto en los 3 se acepta el insert.
+
+iii)
+idserv=33 matchea correctamente, por lo tanto los 3 tipos de match aceptan esta columna pero esperan el resultado
+de la fk compuesta.la fk zona='A';nroc=3; solos, existen ambos valores en la tabla, pero corresponden a filas distintas.
+Los tipos de matching son para resolver valores nulos, como 'A',3 no esta en la tabla referenciada los 3 matchs rechazan
+
+iv)
+Se cambia el valor donde nroc=3 por null:
+MATCH SIMPLE: Aunque el otro valor de la fk sea nulo o no, match simple lo aceptará.
+
+MATCH PARCIAL: La fila a modificar ya habia pasado por el filtro match parcial, si la clave no era null en ambas columnas
+se aceptará, y en caso de que el valor de la columna zona era null, tambien se aceptará.
+
+MATCH FULL: Si hablamos de match full, antes habia si o si 2 valores en la fk compuesta, por lo tanto si queremos introducir
+un null en una columna de la fk el match full rechazará.
+
+v)
+Si se modifica la totalidad de la fk compuesta con null, entonces los 3 tipos de match aceptaran, ya que en esa tabla
+se aceptan esas 2 columnas de la fk en null.
+
+vi)
+MATCH SIMPLE: Al tener un valor null en la clave compuesta automaticamente el match simple lo acepta.
+
+MATCH PARCIAL: El match simple permite null pero los valores no nulos de la fk compuesta deben coincidir con los
+valores de la tabla referenciada. El valor zona='H' no existe en la tabla CLIENTE, por lo tanto se rechaza.
+
+MATCH FULL: Si estamos en match full, anteriormente todos los valores de la fk no eran null, si intentamos poner solo
+una columna de la fk compuesta en null el match full rechazará. Solo acepta todos valores correctos, o todos valores nulos.
+
