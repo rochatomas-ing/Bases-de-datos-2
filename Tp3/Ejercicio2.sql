@@ -79,7 +79,7 @@ CREATE OR REPLACE TRIGGER TG_HORAS_TAREA_ENTRE_MIN_MAX
     FOR EACH ROW
     EXECUTE FUNCTION FN_HORAS_TAREA_ENTRE_MIN_MAX();
 
---Todos los voluntarios de instituciones de Canadá (CA) deben realizar la misma tarea que su coordinador.
+--c)Todos los voluntarios de instituciones de Canadá (CA) deben realizar la misma tarea que su coordinador.
 
 CREATE OR REPLACE FUNCTION FN_VOLUNTARIO_INSTITUCION_CANADA_MISMATAREA_COORDINADOR()
 RETURNS TRIGGER AS $$
@@ -103,7 +103,7 @@ CREATE OR REPLACE TRIGGER TG_FN_VOLUNTARIO_INSTITUCION_CANADA_MISMATAREA_COORDIN
     FOR EACH ROW
     EXECUTE FUNCTION FN_VOLUNTARIO_INSTITUCION_CANADA_MISMATAREA_COORDINADOR();
 
---Los voluntarios no pueden cambiar de institución más de tres veces en un año.
+--d)Los voluntarios no pueden cambiar de institución más de tres veces en un año.
 
 CREATE OR REPLACE FUNCTION FN_VOLUNTARIO_LIMITE_CAMBIO_INSTITUCION_MAX()
 RETURNS TRIGGER AS $$
