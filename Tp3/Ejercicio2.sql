@@ -112,6 +112,7 @@ RETURNS TRIGGER AS $$
             FROM unc_esq_voluntario.historico h
             WHERE h.nro_voluntario=new.nro_voluntario AND
                   extract(year from h.fecha_inicio)=extract(year from current_date)
+            group by h.nro_voluntario,h.id_institucion
         )>=3 then
             RAISE EXCEPTION 'El voluntario % ha exedido el limite de cambios de institucion por año',new.nro_voluntario;
         end if;

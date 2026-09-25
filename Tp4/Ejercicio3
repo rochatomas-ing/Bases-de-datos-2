@@ -1,0 +1,26 @@
+- Ejercicio 3
+a) ¿Qué sucedería con las actualizaciones sobre las vistas definidas si se agrega WITH CHECK OPTION?
+a.1: ENVIOS_500: Es automaticamente actualizable, y ademas, no depende de otras vistas, asique ya sea WCO cascade o local, la actualizacion será visualizada en la vista.
+
+a.2: ENVIOS_500M: Es automaticamente actualizable, esta vista depende de ENVIOS_500, como todas las de ENVIO_500M están dentro de ENVIOS_500, ya sea local o cascade, si la vista ENVIOS_500M acepta la actualizacion, significa que la vista ENVIOS_500 tambien la acepta ya que es menos restrictiva, por lo tanto, la actualizacion se verá reflejada en ENVIOS_500M
+
+a.3 y a.4: Como ambas no son automaticamente actualizables, cualquier actualizacion por mas que sea aceptada en estas vistas, no se verán reflejadas en la misma.
+
+b) Determine el efecto de las siguientes operaciones sobre la vista Envios500, según tenga especificada opción de chequeo (WITH CHECK OPTION) o no.
+
+Nota: considere que existen los proveedores P1 y P2 y los artículos A1 y A2
+
+d.1) INSERT INTO ENVIOS500 VALUES (‘P1’, ‘A1’, 500);
+Se deja insertar ya que 500 es el minimo del valor cantidad de la lista ENVIOS500.
+
+d.2) INSERT INTO ENVIOS500 VALUES (‘P2’, ‘A2’, 300);
+Si tiene WCO se rechaza ya que no cumple con la condicion de la vista. En cambio, sin WCO no se cheque la condicion del where de la vista, por lo tanto se aceptaria.
+
+d.3) UPDATE ENVIOS500 SET cantidad=100 WHERE id_proveedor= ’P1’;
+Con WCO se rechaza, ya que la cantidad en esta vista no puede ser <500. Pero sin WCO se acepta.
+
+d.4) UPDATE ENVIOS500 SET cantidad=1000 WHERE id_proveedor= ’P2’;
+Ya sea con WCO(cascade o local) o sin WCO, se acepta, en caso del WCO, cumple con la condicion de la vista.
+
+d.5) INSERT INTO ENVIOS500 VALUES (‘P1’, ‘A3’, 700);
+Se rechaza para ambos casos, WCO y sin WCO, ya que no existe el articulo A3.
