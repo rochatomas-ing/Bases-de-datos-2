@@ -11,5 +11,7 @@
     <file url="file://$PROJECT_DIR$/Tp3/Ejercicio6.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/Tp4/Ejercicio1.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/Tp4/Ejercicio2.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/Tp4/Ejercicio6_triggers.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/Tp4/Ejercicio7.sql" dialect="PostgreSQL" />
   </component>
 </project>

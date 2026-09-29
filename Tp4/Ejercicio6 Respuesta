@@ -1,0 +1,17 @@
+Ejercicio 6:
+
+CREATE VIEW ciudad_kp_2 AS
+SELECT id_ciudad, nombre_ciudad, c.id_pais, nombre_pais
+FROM ciudad c NATURAL JOIN pais p;
+
+CREATE VIEW entregas_kp_3 AS
+SELECT nro_entrega, re.codigo_pelicula, cantidad, titulo
+FROM renglon_entrega re JOIN pelicula p using (codigo_pelicula);
+
+a) Indique en cada caso cuál es la clave preservada en la vista, de qué tabla proviene y qué atributos de la vista se pueden actualizar de acuerdo al estándar SQL
+
+Vista ciudad_kp_2: La tabla que tiene la clave preservada de la vista es ciudad, y la clave es id_ciudad. Por lo tanto los atributos que se van a poder actualizar seran los que están en la tabla ciudad, es decir, id_ciudad, nombre_ciudad, id_pais.
+
+Vista entregas_kp_3: La tabla que tiene la clave preservada de la vista es renglon_entrega, y la clave de la vista es la clave compuesta nro_entrega, codigo_pelicula. Por lo tanto los datos actualizables de la vista serán los de la tabla renglon_entrega, es decir, nro_entrega, codigo_pelicula y cantidad.
+
+c)

@@ -1,0 +1,37 @@
+Ejercicio 5:
+
+Analice cuáles serían los controles y el comportamiento ante actualizaciones sobre las vistas EMPLEADO_DIST_20, EMPLEADO_DIST_2000 y EMPLEADO_DIST_20_70 creadas en el ej. 2, si las mismas están definidas con WITH CHECK OPTION, ya sea LOCAL o CASCADE. Evalúe diferentes alternativas.
+
+CREATE VIEW V_EMPLEADO_DIST_20 AS
+    SELECT id_empleado, nombre, apellido, sueldo, fecha_nacimiento
+    FROM unc_esq_peliculas.empleado
+    WHERE id_distribuidor=20;
+
+CREATE VIEW V_EMPLEADO_DIST_20_SUELDOMAYORA_2000 AS
+    SELECT id_empleado,nombre,apellido,sueldo
+    FROM V_EMPLEADO_DIST_20
+    WHERE sueldo>2000;
+
+CREATE VIEW V_EMPLEADO_DIST_20_NACIDO_DECADA_70 AS
+    SELECT *
+    FROM V_EMPLEADO_DIST_20
+    WHERE EXTRACT(YEAR FROM fecha_nacimiento) BETWEEN 1970 AND 1979;
+
+Vista V_EMPLEADO_DIST_20:
+Para insert como la vista no incluye id:distribuidor, entonces siempre lanzará error porque se le asignará NULL.
+WCO local: En caso de insert o update se chequeará que el id_distribuidor sea igual a 20, solo esas tuplas se aceptarán.
+
+WCO cascade: Como esta vista no trae y filtra tuplas de otra vista, el comportamiento será el mismo que en WCO local.
+
+
+Vista V_EMPLEADO_DIST_20_SUELDOMAYORA_2000
+Para insert como la vista no incluye id:distribuidor, entonces siempre lanzará error porque se le asignará NULL.
+WCO local: En caso de actualizacion, se deberá chequear que el sueldo del empleado sea mayor a 2000 y en caso de que la vista V_EMPLEADO_DIST_20 tenga WCO se chequeará la condicion de esta vista tambien.
+
+WCO cascaded: En caso de actualizacion, se chequeará que el sueldo del empleado sea mayot a 2000 y ademas, aunque la vista V_EMPLEADO_DIST_20 tenga o no tenga WCO igual se chequeará su condicion.
+
+Vista V_EMPELADO_DIST_20_NACIDO_DECADA_70
+Para insert como la vista no incluye id:distribuidor, entonces siempre lanzará error porque se le asignará NULL.
+WCO local: En caso de actualizacion se chequeará que el año de la fecha de nacimiento insertada esté entre 1970 y 1979, y si la vista V_EMPLEADO_DIST_20 tiene WCO se chequyeará su condicion tambien. En caso de que la vista anterior no tenga WCO, no se chequeará su condicion y se actualizará de forma correcta.
+
+WCO cascade: En caso de actualizacion se cheqyeará que el año de su fecha de la fecha de naciemiento insertada esté entre 1970 y 1979, aunque la vista V_EMPLEADOO_DIST_20 tenga o no tenga WCO, se chequeará igual su condicion.
