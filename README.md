@@ -1,4 +1,4 @@
-# Bases de Datos 2 — Ingeniería en Sistemas (UNC)
+# Bases de Datos 2 — Ingeniería en Sistemas (UNICEN)
 
 Resoluciones de los trabajos prácticos de la materia **Bases de Datos 2**, más el material de la
 cátedra. Es un repositorio de registro y consulta: no hay build, tests ni dependencias, sólo SQL y
@@ -14,7 +14,9 @@ docs/
 ```
 
 Cada `TpN/` corresponde al `docs/Tps/Practico N*.pdf` correspondiente. La numeración de ejercicios se
-reinicia en cada TP. Tp6 (MongoDB) todavía no tiene carpeta.
+reinicia en cada TP. Dos excepciones al patrón: Tp1 va partido en `tp1_parte1.sql` y
+`tp1_parte2_querys.sql`, y Tp6 usa un archivo `.js` por **parte** del enunciado (`ParteA.js`,
+`ParteB.js`) en vez de uno por ejercicio, porque no es SQL.
 
 ## Los 6 prácticos
 
@@ -49,13 +51,17 @@ jdbc:postgresql://dbases.exa.unicen.edu.ar:6432/Ing26    usuario: unc_45782957
 mongosh "mongodb://unc_DNI:DNI@dbases.exa.unicen.edu.ar:29017/Peliculas?authSource=admin"
 ```
 
+`mongosh` **no está instalado** en la máquina: para las partes A y B usá Compass (sí lo está) o un
+data source MongoDB en DataGrip. `mongod`, `mongodump` y `mongorestore` sí están; `mongod` hay que
+levantarlo a mano para trabajar sobre la copia local de las partes C y D.
+
 ## Estado
 
 - **Tp1** — consultas 1–24 resueltas; falta la 20 (salteada) y la 25.
 - **Tp2** — completo, con una duda sin resolver en el 4.a.
 - **Tp3** — ejercicios 1–6 resueltos; faltan el 7 y el 8.
 - **Tp4** — completo, salvo el inciso c) del ejercicio 6.
-- **Tp5** — sin empezar.
-- **Tp6** — sin empezar.
+- **Tp5** — completo: los 5 ejercicios con su justificación.
+- **Tp6** — Parte A escrita; faltan los resultados, la Parte B y las partes C, D y E.
 
 Las convenciones de estilo y las trampas de la base están en [`AGENTS.md`](AGENTS.md).

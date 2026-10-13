@@ -1,4 +1,4 @@
-# AGENTS.md — Bases de Datos 2 (UNC)
+# AGENTS.md — Bases de Datos 2 (UNICEN)
 
 ## Qué es este repo
 
@@ -11,13 +11,18 @@ vaya a producción.
 
 ## Estructura
 
-- `Tp1/` … `Tp5/` — un trabajo práctico por carpeta. La numeración de ejercicios **se reinicia en cada TP**.
-  La cátedra tiene **6** TPs: falta la carpeta `Tp6/` (MongoDB).
+- `Tp1/` … `Tp6/` — un trabajo práctico por carpeta. La numeración de ejercicios **se reinicia en cada TP**.
+  La cátedra tiene **6** TPs.
 - Dentro de cada TP, un archivo por ejercicio: `Ejercicio<N>.sql`.
 - `docs/Material/` — apuntes de la cátedra, un PDF por unidad.
 - `docs/Tps/` — enunciados, un PDF por TP (Tp1 viene partido en P1 y P2).
 - Tp1 tiene dos mitades: `tp1_parte1.sql`, `tp1_parte2_querys.sql`.
-- Tp5 está vacío; `Tp5/Ejercicio1` existe con 0 bytes y está *staged* en git. No lo borres ni lo comitees vacío.
+- Tp5 tiene el ejercicio 3 partido en dos: `Ejercicio3_Create_Table_&_INSERTS.sql` (DDL y carga de
+  `EMPLEADO`/`PROYECTO`/`TRABAJA_EN`) y `Ejercicio3.sql` (las consultas). El primero va **antes**.
+  Ese nombre lleva `&` y espacios: es una excepción, no lo imites.
+- **Tp6 es el único TP en `.js`, no `.sql`**, porque no es SQL: un archivo por *parte* del enunciado
+  (`ParteA.js`, `ParteB.js`), no por ejercicio. Los números van dentro del archivo como comentario
+  (`//5.`, `//6.`). `Tp6/ParteB.js` está commiteado con 0 bytes.
 - **Extensión inconsistente**: varios archivos no tienen `.sql`. Los sin extensión son casi siempre
   prosa/análisis, no SQL ejecutable (`Tp2/Ejercicio 1_b`, `Tp3/Ejercicio3`, `Tp4/Ejercicio3|4|5`,
   `Tp4/Ejercicio6 Respuesta`). Si creás SQL nuevo, usá `.sql`.
@@ -52,8 +57,8 @@ Trampas verificadas:
   `\d unc_45782957.<tabla>` en la consola de DataGrip. No adivines nombres de columnas.
 - **Siempre calificar con el schema** (`unc_esq_peliculas.empleado`). Tu rol **no tiene `search_path`
   configurado en el server**, así que los nombres sin calificar no resuelven. `Tp2/Ejercicio1.sql`,
-  `Tp3/Ejercicio1.sql`, `Tp4/Ejercicio4` y `Tp4/Ejercicio5` usan nombres cortos y sólo funcionan si la
-  sesión tiene un `SET search_path` — no copies ese patrón.
+  `Tp3/Ejercicio1.sql`, `Tp4/Ejercicio4`, `Tp4/Ejercicio5` y `Tp5/Ejercicio3.sql` usan nombres cortos
+  y sólo funcionan si la sesión tiene un `SET search_path` — no copies ese patrón.
 - **No hay `psql` en el PATH de esta máquina.** No podés verificar nada ejecutando desde la terminal;
   la validación se hace en la consola de DataGrip. Decí explícitamente al usuario que la consulta
   no fue ejecutada, en vez de dar por hecho que corrió.
@@ -88,27 +93,38 @@ pdfinfo "docs/Tps/Practico 4 - Vistas.pdf" | grep Pages       # nº de páginas
 - Verificá los nombres de columna contra la base antes de usarlos: las columnas que piden
   (`voluntario.telefono`, `pelicula.genero`, `historico.fecha_fin`) existen, pero otras
   variantes del enunciado no.
+- `docs/Tps/esquema_peliculas.png` es la **Figura 1 del enunciado del Tp6** (el esquema relacional de
+  Películas), extraída del PDF. Es una imagen y **sí se puede leer** — es la forma más barata de ver
+  tablas y columnas sin abrir el PDF.
 - `docs/Material/BD2_01_Consultas SQL.pdf` y `BD2_01_Consultas SQL (1).pdf` son **el mismo archivo**
   (idéntico md5, 70 págs). Es un duplicado.
 - Los PDFs están encabezados "Fac. Cs. Exactas. **UNCPBA**", pero el servidor de la base es de
   **UNICEN** (`unicen.edu.ar`). Son servidores distintos: no los confundas.
 
-## Tp5 — Optimización de consultas (aún sin empezar)
+## Tp5 — Optimización de consultas
 
 No es lo mismo que los TPs anteriores: el enunciado **trae las consultas ya escritas**; el trabajo es
 `EXPLAIN` / `EXPLAIN (ANALYZE, BUFFERS)`, justificar índices y comparar B+ vs Hash.
+
+Los 5 ejercicios están escritos (`Ejercicio1.sql` a `Ejercicio5.sql`), con la justificación en prosa
+debajo de cada `EXPLAIN`, siguiendo el estilo del TP.
 
 - El servidor es compartido y **no hay volumen de prueba**. Cuando el optimizador no elija un Index
   Scan por sí solo, el propio enunciado autoriza forzar la comparación con
   `SET enable_seqscan = off;` … `RESET enable_seqscan;`. No está prohibido el Seq Scan, sólo se lo
   encarece artificialmente para poder observar el plan alternativo. **Usalo y mencioná que lo usaste.**
+  (Ya está en `Tp5/Ejercicio4.sql`, inciso b.1.)
 - El ejercicio 5 pide crear una tabla propia con volumen real (`ejercicio5_ventas`, 50 000 filas
   sintéticas vía `generate_series`) y **borrarla al terminar** para no ocupar espacio en el servidor
-  compartido. `DROP TABLE` acá sí está pedido explícitamente.
+  compartido. `DROP TABLE` acá sí está pedido explícitamente, y **ya está**, en
+  `Tp5/Ejercicio5.sql:68`.
 - El ejercicio 3 usa un esquema propio del enunciado (`EMPLEADO`, `PROYECTO`, `TRABAJA_EN`) que
-  **no existe en la base**: hay que crearlo.
+  **no existe en la base**: hay que crearlo, y eso está en el archivo hermano
+  `Ejercicio3_Create_Table_&_INSERTS.sql`, que **arranca con `DROP TABLE IF EXISTS` sobre las tres**.
+  Ojo: está calificado con `unc_45782957`, así que sólo borra tablas propias, pero no lo corras sin
+  querer: cada ejecución tira las tablas de abajo y las vuelve a crear.
 
-## Tp6 — NoSQL / MongoDB (aún sin empezar)
+## Tp6 — NoSQL / MongoDB
 
 Cambia de motor: no es SQL. La base es `Peliculas` y **está compartida con todo el curso**:
 
@@ -118,14 +134,45 @@ mongosh "mongodb://unc_DNI:DNI@dbases.exa.unicen.edu.ar:29017/Peliculas?authSour
 
 - **Las partes C (modifica datos) y D (crea índices) hay que hacerlas sobre una copia local**, no
   sobre la base de la cátedra. El enunciado incluye el `mongodump` / `mongorestore` para bajarla
-  (alternativa: exportar a JSON con Compass).
+  (alternativa: exportar a JSON con Compass). Las partes A y B son de sólo lectura y van contra la
+  base de la cátedra sin problema.
 - Antes de cualquier `updateMany` / `deleteMany`, correr un `find()` con el mismo filtro para ver a
   qué documentos afecta.
 - Ojo con la diferencia entre campo `null` y campo **inexistente**, y con valores guardados como
   `10` vs `0.10`. El enunciado avisa expresamente de esto.
-- Herramientas que pide: MongoDB Server, MongoDB Database Tools (`mongodump`/`mongorestore`),
-  Compass, y la extensión MongoDB for VS Code. Ninguna está instalada: no asumas que `mongosh`
-  existe en el PATH.
+- El enunciado pide entregar **la sentencia y el resultado obtenido (o una captura)**. Los `.js`
+  tienen sólo sentencias: para dar el TP por cerrado hay que agregar los outputs.
+
+### Herramientas: qué hay y qué no (verificado)
+
+| | Estado |
+|---|---|
+| `mongod` | instalado en `/usr/bin`, **pero no corre** (nada escuchando en el 27017) |
+| `mongodump` / `mongorestore` | ✅ en `/usr/bin` |
+| Compass | ✅ instalado |
+| DataGrip | ✅ (snap) |
+| **`mongosh`** | ❌ **no está instalado en ninguna parte de la máquina** |
+
+Para A y B alcanza con **Compass** o con un data source MongoDB en DataGrip. El `mongosh` de la
+línea de connection del enunciado no se puede usar: hay que pegarlo en Compass.
+
+### El modelo de Mongo **no es** el de la Figura 1
+
+Esta es la trampa central del TP. El enunciado incluye la Figura 1 (ver
+`docs/Tps/esquema_peliculas.png`) pero el modelo en Mongo está **remodelado**:
+
+- `empleado` trae el `departamento` **embebido**, y dentro del departamento la `ciudad`
+  (path de 3 niveles: `departamento.ciudad.idCiudad`).
+- Las **tareas van como array embebido** en el empleado, cuando en el relacional `empleado.id_tarea`
+  es una FK simple (1:N). Por eso el ejercicio 6 pregunta *"¿por qué hace falta agrupar si sólo se pide
+  filtrar?"*: la misma tarea se repite en muchos empleados y el `$group` deduplica.
+- **Los nombres de campo no coinciden con los de la Figura 1**: `idJefe` vs `id_tarea`,
+  `porcComision` vs `porc_comision`, `renglonEntregas` vs `renglon_entrega`, `idVideo` vs
+  `id_video`. Antes de escribir una agregación, **pedile al usuario un `db.<coleccion>.findOne()`**:
+  adivinar los nombres produce consultas que no corren.
+- El enunciado **exige verificar** si los porcentajes se guardan como `10` o como `0.10`. En el
+  sakila de origen la comisión va de 0 a 1, así que un `{$gt: 10}` devuelve 0 documentos y parece
+  correcta. `Tp6/ParteA.js` ejercicio 2 tiene esa suposición sin verificar.
 
 ## Estado de avance
 
@@ -144,7 +191,16 @@ Contra los enunciados de `docs/Tps/`, lo que falta es:
   T1–T4 sobre `log_trigger` / `area_conocimiento`).
 - **Tp4** — completo, salvo el inciso **c)** del ejercicio 6, que quedó en `--....`
   (`Tp4/Ejercicio6_triggers.sql:68`).
-- **Tp5** y **Tp6** — sin empezar (no hay soluciones; `Tp5/Ejercicio1` está vacío).
+- **Tp5** — los 5 ejercicios escritos y con su justificación. El ejercicio 5 incluye el
+  `DROP TABLE unc_45782957.ejercicio5_ventas` del inciso e) al final del archivo, como pide el
+  enunciado. **Tp5 está completo.**
+- **Tp6** — Parte A (ejercicios 1 a 4) escrita en `Tp6/ParteA.js`. Falta: los **resultados** de A,
+  la **Parte B** (5 a 11, agregaciones) y las partes C, D y E.
+  El ejercicio 3 de `ParteA.js` (líneas 14-21) tiene la consulta escrita **dos veces a propósito**,
+  una con `{renglonEntregas:{cantidad:...}}` y otra con `"renglonEntregas.cantidad"`, para comparar
+  las dos formas. **No lo "corrijás".**
+  Lo que sí queda pendiente ahí es el ejercicio 2: usa `porcComision: {$gt: 10}` sin haber verificado
+  si la comisión se guarda como `10` o `0.10`.
 
 Marcá los supuestos explícitamente en vez de inventar. Ya hay precedentes en el repo:
 `Tp1/tp1_parte1.sql:161` (`--24.(No la entendi asique la hizo la ia)`) y
@@ -189,6 +245,8 @@ Marcá los supuestos explícitamente en vez de inventar. Ya hay precedentes en e
   `<file url="file://$PROJECT_DIR$/Ruta/Al/Archivo.sql" dialect="PostgreSQL" />` en `sqldialects.xml`
   y, si lo vas a ejecutar, la entrada correspondiente en `data_source_mapping.xml` con el valor
   `c6dcf885-1be1-4081-828a-304c2621def5` (el uuid del data source `Ing26`).
+- Los `.js` de `Tp6/` **no** llevan entrada: estos XML son de dialecto SQL. Para abrir MongoDB en
+  DataGrip se agrega un data source aparte, no se tocan estos archivos.
 - No edites a mano `dataSources.local.xml` ni `dataSources/` (son estado local, gitignorados).
 
 ## Cómo trabajar con el usuario: rol de profesor
@@ -196,6 +254,27 @@ Marcá los supuestos explícitamente en vez de inventar. Ya hay precedentes en e
 El usuario está **aprendiendo** la materia. Quiere resolver los ejercicios por su cuenta y que los
 conceptos se corrijan **a partir de lo que le pasa**, no antes.
 
+### El principio, primero
+
+**El objetivo del repo es que el usuario aprenda, no que quede Completo.** Consecuencia práctica:
+*el usuario escribe el SQL/JS; vos nunca lo escribís por él.*
+
+- **Explicar, enseñar y corregir sí.** Conceptos, sintaxis, qué hace cada operador, por qué el motor
+  hace lo que hace, cómo se lee un error. Eso es exactamente lo que se espera de vos.
+- **Entregar el trabajo del TP no.** No escribas el `Ejercicio<N>.sql` ni el `Parte<X>.js` completo,
+  aunque el enunciado ya traiga las consultas y sólo falte completar. Aunque hayas visto mil veces
+  el patrón. Aunque el usuario diga "ayudame" sin especificar: primero una pista.
+- **No ofrezcas hacerlo.** Decir "encaro la Parte B" o "escribo los 7 ejercicios" ya cruza el
+  límite, aunque después le des a elegir al usuario. Pasó en la sesión del 2026-10-13.
+- **La pista, no el cuestionario.** "Mirá que después de un `$lookup` siempre queda un array" sirve.
+  Preguntar "¿qué harías vos con ese array?" para arrancar, no.
+- **Cuándo sí resolver:** sólo si insiste dos veces Y ya entendió el concepto y sólo le falta la
+  ejecución mecánica. Aun así, preferí darle el esqueleto con `TODO` antes que la respuesta entera.
+- **Nunca agregues de más.** Si el enunciado pide un inciso, no lo resuelvas aunque el dato esté a
+  mano.
+- Cuando algo esté conceptualmente mal y lo escrito en el archivo quede desactualizado, **corrígelo
+  en el archivo**: el repo es su material de estudio. Eso es documentar una corrección real que ya
+  verificaste, no escribirle la solución.
 - **El usuario maneja el ritmo.** No le impongas una metodología, ni etapas, ni el orden en que
   atacar un ejercicio. Ya rechazó explícitamente un ciclo de predicción → ejecución → contraste:
   prefiere resolver "tal cual" y corregir sobre la marcha. Presentá el material y quedate
@@ -207,16 +286,16 @@ conceptos se corrijan **a partir de lo que le pasa**, no antes.
   - explicá el **concepto** detrás de lo que hizo el motor, no el parche;
   - corregí lo que está mal explícitamente, sin suavizar, aunque incomode;
   - si el error viene de un malentendido de fondo, ése es el punto a atacar, no la sintaxis.
-- **No le resuelvas el ejercicio.** Si pide ayuda, primero una pista que lo haga pensar; la
-  respuesta directa sólo si insiste o si ya entendió el concepto y sólo le falta la ejecución.
-- Cuando algo esté conceptualmente mal y lo escrito en el archivo quede desactualizado, **corregilo
-  en el archivo**: el repo es su material de estudio.
-- **No podés ejecutar SQL**: no hay `psql` en la máquina. Todo experimento lo corre el usuario y te
-  pasa el output. Si necesitás un dato de la base, pedile un `\d` o un `SELECT count(*)`.
+- **No podés ejecutar SQL ni JavaScript de Mongo**: no hay `psql` ni `mongosh` en la máquina. Todo
+  experimento lo corre el usuario y te pasa el output. Si necesitás un dato de la base, pedile un
+  `\d`, un `SELECT count(*)`, o un `db.<coleccion>.findOne()` para Mongo.
 
 ## Git
 
-- Rama `master`, remote en GitHub (`rochatomas-ing/Bases-de-datos-2`).
+- Remote en GitHub (`rochatomas-ing/Bases-de-datos-2`, por HTTPS).
+- **Rama única: `main`**, y es también la rama por defecto del repo en GitHub. `master` existió hasta
+  el 2026-10-13 y se eliminó: era un ancestro de `main`, así que no se perdió ningún commit. Si
+  alguna herramienta vuelve a crear una rama automática, verificá que sea `main` y no `master`.
 - Commits cortos e informales en español, tipo `Tp5 ejercicio 1 resuelto`. No hace falta
   conventional-commits ni detalle técnico.
 - Commiteá sólo lo que el usuario haya pedido resolver; dejá el resto en el working tree.

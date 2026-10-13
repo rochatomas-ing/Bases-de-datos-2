@@ -5,6 +5,7 @@ db.empleado.find({
     {nombre: 1, apellido: 1});
 
 //2. Determine cuántos empleados reciben un sueldo superior a 1000 y tienen un porcentaje de comisión mayor al 10%.
+//porcComision de guarda con valores del 0 al 100 en decimal.
 db.empleado.countDocuments(
   {sueldo:{$gt: 1000},
     porcComision:{$gt: 10}}
@@ -25,3 +26,4 @@ db.empleado.find(
     { "departamento.ciudad.idCiudad": 41570},
     { _id: 1, apellido: 1, sueldo: 1, "departamento.nombre": 1}
 ).sort({apellido: 1});
+
